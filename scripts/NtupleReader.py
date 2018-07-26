@@ -2,7 +2,7 @@ from pylab import *
 import pandas as pd
 from root_pandas import read_root
 from RechitCalibrator import *
-import common
+import Common as common
 
 class NtupleReader():
     def __init__(self,fileName):
@@ -26,7 +26,7 @@ class NtupleReader():
         
         ntuple = read_root( self.ntupleFileName, 'ana/hgc', columns=self.variableNamesInNtuple )
 
-        rc = RecHitCalibration()
+        rc = RechitCalibrator()
         df = pd.DataFrame(columns=self.variableNames)
 
         for index, row in ntuple.iterrows():
@@ -39,20 +39,15 @@ class NtupleReader():
             sigmaNoise = rc.sigmaNoiseGeV(layer, thick) 
             threshold  = self.sigmaNoiseCut * sigmaNoise
 
-            # define selection critera for hit and gen
-            hitAboveTreshold = energy >= sigmaNoise
-            hitOnPosSide = row['rechit_z'] > 0
-            genOnPosSide = row['genpart_dvz'] > 0
-
             # positive side ## 
-            hitslt = hitOnPosSide & hitAboveTreshold
-            genslt = genOnPosSide
+            hitslt = (energy >= threshold) & (row['rechit_z'] > 0)
+            genslt = (row['genpart_dvz'] > 0)
 
             # fill this event record in dataframe 
             df.loc[index] = [
                 layer[hitslt],
                 energy[hitslt],
-                row['rechit_time'][hitslt]
+                row['rechit_time'][hitslt],
                 row['rechit_x'][hitslt],
                 row['rechit_y'][hitslt],
                 row['rechit_z'][hitslt],
@@ -66,6 +61,8 @@ class NtupleReader():
         self.df = df
         if savePickle:
             df.to_pickle(self.dataframeFileName)
+        else:
+            return df
 
             
 

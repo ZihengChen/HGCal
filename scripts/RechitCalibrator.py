@@ -8,7 +8,7 @@ class RechitCalibrator:
     def __init__(self):
         """set variables used in the functions"""
         # https://github.com/cms-sw/cmssw/blob/CMSSW_9_0_X/RecoLocalCalo/HGCalRecProducers/python/HGCalRecHit_cfi.py#L6-L58
-        self.dEdX_weights = self.calibrationTable
+        self.dEdX_weights = self.calibrationTable()
 
         #https://github.com/cms-sw/cmssw/blob/CMSSW_9_2_X/RecoLocalCalo/HGCalRecProducers/python/HGCalRecHit_cfi.py#L82
         self.thicknessCorrection = np.array([1.132,1.092,1.084])  # 100, 200, 300 um
@@ -29,8 +29,7 @@ class RechitCalibrator:
     def sigmaNoiseGeV(self, layer, thicknessIndex):
         sigmaNoiseMeV = self.sigmaNoiseMIP(layer, thicknessIndex) * self.MeVperMIP(layer, thicknessIndex)
         return sigmaNoiseMeV/1000
-
- 
+    
     # helper functions below
 
     def MeVperMIP(self, layer, thicknessIndex):
