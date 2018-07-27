@@ -24,6 +24,15 @@ def getTauDecayMode(gen_id):
         
     return tauDecayMode
 
+def EtaPhi(x,y,z):
+    r = (x**2+y**2)**0.5
+    theta = np.arctan(r/z)
+    eta = -np.log(np.tan(theta/2))
+    phi = np.arccos(x/r)
+    phi[x<0] = 2*np.pi - phi[x<0]
+    return eta, phi
+
+
 
 def truncatedCone(eta0,eta1,z0,z1):
     R,r = 200,400
@@ -53,8 +62,6 @@ def truncatedCone(eta0,eta1,z0,z1):
     return x,y,z
 
 
-import division, print_function, absolute_import
-from pylab import *
 from matplotlib.patches import Arc
 from matplotlib.collections import PatchCollection
 
@@ -91,3 +98,4 @@ def circles(x, y, s, c='b', vmin=None, vmax=None, **kwargs):
     if c is not None:
         plt.sci(collection)
     return collection
+
