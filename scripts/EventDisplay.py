@@ -24,7 +24,7 @@ class EventDisplay():
                                                         zaxis=dict(title='y (cm)')),
                                             margin = dict(l=0,r=0,b=0,t=0)
                                             ))
-        iplot(fig, filename=common.getBaseDir()+'plots/test')
+        plot(fig, filename=common.getBaseDir()+'plots/test')
 
 
 
@@ -43,7 +43,7 @@ class EventDisplay():
             genLinesColor = ["red","blue","gray"][mode]
 
             for i in range(n):
-                if (event.gen_e[i]>10) & ((event.gen_vx[i]**2 + event.gen_vy[i]**2) < 200**2):
+                if  (event.gen_e[i]>10) & ((event.gen_vx[i]**2 + event.gen_vy[i]**2) < 200**2):#
                     x[2*i]=event.gen_vx[i]
                     y[2*i]=event.gen_vy[i]
                     z[2*i]=event.gen_vz[i]
